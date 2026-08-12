@@ -190,44 +190,28 @@
   </div>
 
   <script>
-    // Supabase Configuration
+    // Embedded Credentials
     const SUPABASE_URL = 'https://ldlujmpgyqamksqjzccy.supabase.co';
-    // IMPORTANT: Paste your full publishable key below between single quotes
     const SUPABASE_ANON_KEY = 'sb_publishable_SNU5aOt50T7EOdJV86BeRQ_hJRy6oAC';
 
     let supabaseClient = null;
     let tasks = [];
 
-    // Initialize Supabase Connection
     function initSupabase() {
-      if (SUPABASE_ANON_KEY === 'sb_publishable_SNU5aOt50T7EOdJV86BeRQ_hJRy6oAC' || !SUPABASE_ANON_KEY) {
-        console.warn('Supabase key pending setup.');
-      } else {
-        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      }
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     }
 
-    // Fetch Initial Data & Listen for Live Updates
     async function initRealtimeData() {
       initSupabase();
 
-      if (!supabaseClient) {
-        document.getElementById('task-list').innerHTML = `
-          <tr><td colspan="6" class="p-6 text-center text-amber-400">
-            <i class="fa-solid fa-triangle-exclamation text-lg mb-2 block"></i>
-            Please paste your full Supabase Publishable Key inside <code>index.html</code> (line 198) to enable live tracking.
-          </td></tr>`;
-        return;
-      }
-
-      // Initial Fetch
+      // Fetch existing tasks
       const { data, error } = await supabaseClient.from('tasks').select('*').order('id', { ascending: false });
       if (!error && data) {
         tasks = data;
         renderTasks();
       }
 
-      // Realtime Database Subscription
+      // Subscribe to real-time changes
       supabaseClient
         .channel('schema-db-changes')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, async () => {
@@ -269,10 +253,6 @@
 
     async function saveTask(e) {
       e.preventDefault();
-      if (!supabaseClient) {
-        alert('Supabase client is not connected. Check your Publishable API key.');
-        return;
-      }
 
       const submitBtn = document.getElementById('submit-btn');
       submitBtn.disabled = true;
@@ -303,9 +283,7 @@
 
     async function deleteTask(id) {
       if (confirm('Are you sure you want to delete this task from project tracking?')) {
-        if (supabaseClient) {
-          await supabaseClient.from('tasks').delete().eq('id', id);
-        }
+        await supabaseClient.from('tasks').delete().eq('id', id);
       }
     }
 
@@ -382,7 +360,7 @@
       });
     }
 
-    // Start App
+    // Initialize App
     initRealtimeData();
   </script>
 </body>
