@@ -200,7 +200,7 @@
 
     // Initialize Supabase Connection
     function initSupabase() {
-      if (SUPABASE_ANON_KEY === 'PASTE_YOUR_FULL_PUBLISHABLE_KEY_HERE' || !SUPABASE_ANON_KEY) {
+      if (SUPABASE_ANON_KEY === 'sb_publishable_SNU5aOt50T7EOdJV86BeRQ_hJRy6oAC' || !SUPABASE_ANON_KEY) {
         console.warn('Supabase key pending setup.');
       } else {
         supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
