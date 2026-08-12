@@ -10,56 +10,62 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <!-- FontAwesome Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <!-- Trello-like Font (Charlie Text / Inter / Segoe UI) -->
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Noto Sans, Ubuntu, Droid Sans, "Helvetica Neue", sans-serif;
+    }
+  </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen">
+<body class="bg-[#F4F5F7] text-[#172B4D] min-h-screen">
 
-  <!-- Navigation Header -->
-  <header class="bg-slate-800 border-b border-slate-700 p-4 sticky top-0 z-10 shadow-lg">
+  <!-- Trello-style Header Bar -->
+  <header class="bg-[#0052CC] text-white p-3.5 sticky top-0 z-10 shadow-sm">
     <div class="max-w-7xl mx-auto flex justify-between items-center">
       <div class="flex items-center space-x-3">
-        <i class="fa-solid fa-compass-drafting text-indigo-400 text-2xl"></i>
+        <i class="fa-solid fa-trello text-xl text-white/90"></i>
         <div>
-          <h1 class="text-xl font-bold tracking-wide">ABS Associates</h1>
-          <p class="text-xs text-slate-400">Architecture Project & Deliverable Tracker</p>
+          <h1 class="text-lg font-bold leading-tight">ABS Associates</h1>
+          <p class="text-xs text-blue-100 font-normal">Architecture Project & Deliverable Tracker</p>
         </div>
       </div>
-      <button onclick="openModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-medium text-sm transition-all flex items-center gap-2 shadow-md">
-        <i class="fa-solid fa-plus"></i> New Task
+      <button onclick="openModal()" class="bg-white/20 hover:bg-white/30 text-white px-3.5 py-1.5 rounded-md font-medium text-sm transition-all flex items-center gap-2 backdrop-blur-sm">
+        <i class="fa-solid fa-plus text-xs"></i> New Task
       </button>
     </div>
   </header>
 
-  <main class="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
+  <main class="max-w-7xl mx-auto p-4 sm:p-6 space-y-5">
 
-    <!-- Key Metrics / Stats -->
+    <!-- Overview Stat Cards -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow">
-        <p class="text-xs text-slate-400 uppercase font-semibold">Total Tasks</p>
-        <p id="stat-total" class="text-2xl font-bold mt-1 text-slate-100">0</p>
+      <div class="bg-white border border-[#DFE1E6] p-4 rounded-lg shadow-sm">
+        <p class="text-xs text-[#5E6C84] uppercase font-bold tracking-wider">Total Tasks</p>
+        <p id="stat-total" class="text-2xl font-bold mt-1 text-[#172B4D]">0</p>
       </div>
-      <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow">
-        <p class="text-xs text-slate-400 uppercase font-semibold">In Progress</p>
-        <p id="stat-progress" class="text-2xl font-bold text-blue-400 mt-1">0</p>
+      <div class="bg-white border border-[#DFE1E6] p-4 rounded-lg shadow-sm">
+        <p class="text-xs text-[#5E6C84] uppercase font-bold tracking-wider">In Progress</p>
+        <p id="stat-progress" class="text-2xl font-bold text-[#0052CC] mt-1">0</p>
       </div>
-      <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow">
-        <p class="text-xs text-slate-400 uppercase font-semibold">Overdue</p>
-        <p id="stat-overdue" class="text-2xl font-bold text-rose-400 mt-1">0</p>
+      <div class="bg-white border border-[#DFE1E6] p-4 rounded-lg shadow-sm">
+        <p class="text-xs text-[#5E6C84] uppercase font-bold tracking-wider">Overdue</p>
+        <p id="stat-overdue" class="text-2xl font-bold text-[#DE350B] mt-1">0</p>
       </div>
-      <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl shadow">
-        <p class="text-xs text-slate-400 uppercase font-semibold">Closed / Done</p>
-        <p id="stat-completed" class="text-2xl font-bold text-emerald-400 mt-1">0</p>
+      <div class="bg-white border border-[#DFE1E6] p-4 rounded-lg shadow-sm">
+        <p class="text-xs text-[#5E6C84] uppercase font-bold tracking-wider">Closed / Done</p>
+        <p id="stat-completed" class="text-2xl font-bold text-[#00875A] mt-1">0</p>
       </div>
     </div>
 
     <!-- Filters & Search Toolbar -->
-    <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl flex flex-wrap gap-3 items-center justify-between shadow">
+    <div class="bg-white border border-[#DFE1E6] p-3.5 rounded-lg flex flex-wrap gap-3 items-center justify-between shadow-sm">
       <div class="flex flex-wrap gap-3 items-center w-full md:w-auto">
         <div class="relative w-full sm:w-64">
-          <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-500 text-xs"></i>
-          <input type="text" id="filter-search" oninput="renderTasks()" placeholder="Search project, drawing, assignee..." class="bg-slate-900 border border-slate-700 text-sm rounded-lg pl-8 pr-3 py-2 w-full focus:outline-none focus:border-indigo-500">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-[#6B778C] text-xs"></i>
+          <input type="text" id="filter-search" oninput="renderTasks()" placeholder="Search project, task, assignee..." class="bg-[#FAFBFC] border border-[#DFE1E6] text-sm rounded-md pl-8 pr-3 py-1.5 w-full focus:outline-none focus:border-[#0052CC] focus:bg-white text-[#172B4D]">
         </div>
         
-        <select id="filter-status" onchange="renderTasks()" class="bg-slate-900 border border-slate-700 text-sm rounded-lg px-3 py-2 focus:outline-none">
+        <select id="filter-status" onchange="renderTasks()" class="bg-[#FAFBFC] border border-[#DFE1E6] text-sm rounded-md px-3 py-1.5 focus:outline-none focus:border-[#0052CC] text-[#172B4D]">
           <option value="ALL">All Statuses</option>
           <option value="Not Started">Not Started</option>
           <option value="In Progress">In Progress</option>
@@ -68,7 +74,7 @@
           <option value="Closed">Closed</option>
         </select>
 
-        <select id="filter-role" onchange="renderTasks()" class="bg-slate-900 border border-slate-700 text-sm rounded-lg px-3 py-2 focus:outline-none">
+        <select id="filter-role" onchange="renderTasks()" class="bg-[#FAFBFC] border border-[#DFE1E6] text-sm rounded-md px-3 py-1.5 focus:outline-none focus:border-[#0052CC] text-[#172B4D]">
           <option value="ALL">All Roles</option>
           <option value="Principal Architect">Principal Architect</option>
           <option value="Junior Architect">Junior Architect</option>
@@ -80,26 +86,26 @@
         </select>
       </div>
 
-      <div class="text-xs text-slate-400 flex items-center gap-2">
-        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        Realtime Cloud Active
+      <div class="text-xs text-[#5E6C84] flex items-center gap-2 font-medium">
+        <span class="inline-block w-2 h-2 rounded-full bg-[#36B37E] animate-pulse"></span>
+        Realtime Sync Active
       </div>
     </div>
 
     <!-- Task & Drawing Deliverables Table -->
-    <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-x-auto shadow-md">
+    <div class="bg-white border border-[#DFE1E6] rounded-lg overflow-x-auto shadow-sm">
       <table class="w-full text-left border-collapse text-sm">
-        <thead class="bg-slate-900/60 text-slate-400 uppercase text-xs border-b border-slate-700">
+        <thead class="bg-[#FAFBFC] text-[#5E6C84] uppercase text-[11px] font-bold border-b border-[#DFE1E6]">
           <tr>
-            <th class="p-4">Project & Deliverable</th>
-            <th class="p-4">Assigned To</th>
-            <th class="p-4">Phase</th>
-            <th class="p-4">Deadline</th>
-            <th class="p-4">Status</th>
-            <th class="p-4 text-right">Actions</th>
+            <th class="p-3.5">Project & Deliverable</th>
+            <th class="p-3.5">Assigned To</th>
+            <th class="p-3.5">Phase</th>
+            <th class="p-3.5">Deadline</th>
+            <th class="p-3.5">Status</th>
+            <th class="p-3.5 text-right">Actions</th>
           </tr>
         </thead>
-        <tbody id="task-list" class="divide-y divide-slate-700/50">
+        <tbody id="task-list" class="divide-y divide-[#DFE1E6]">
           <!-- Dynamically Populated -->
         </tbody>
       </table>
@@ -107,11 +113,11 @@
   </main>
 
   <!-- Add / Edit Task Modal -->
-  <div id="task-modal" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-    <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
-      <div class="flex justify-between items-center border-b border-slate-700 pb-3">
-        <h3 id="modal-title" class="text-lg font-semibold">Add New Architecture Task</h3>
-        <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+  <div id="task-modal" class="fixed inset-0 bg-[#091E42]/60 backdrop-blur-xs hidden flex items-center justify-center p-4 z-50">
+    <div class="bg-white border border-[#DFE1E6] rounded-lg max-w-lg w-full p-6 space-y-4 shadow-xl text-[#172B4D]">
+      <div class="flex justify-between items-center border-b border-[#DFE1E6] pb-3">
+        <h3 id="modal-title" class="text-base font-bold text-[#091E42]">Add New Architecture Task</h3>
+        <button onclick="closeModal()" class="text-[#6B778C] hover:text-[#091E42]"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
 
       <form id="task-form" onsubmit="saveTask(event)" class="space-y-4">
@@ -119,12 +125,12 @@
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-medium text-slate-400 mb-1">Project Name *</label>
-            <input type="text" id="project-name" required placeholder="e.g. Visakhapatnam Residence" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500">
+            <label class="block text-xs font-semibold text-[#5E6C84] mb-1">Project Name *</label>
+            <input type="text" id="project-name" required placeholder="e.g. Visakhapatnam Residence" class="w-full bg-[#FAFBFC] border border-[#DFE1E6] rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-[#0052CC] focus:bg-white">
           </div>
           <div>
-            <label class="block text-xs font-medium text-slate-400 mb-1">Architectural Phase</label>
-            <select id="project-phase" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none">
+            <label class="block text-xs font-semibold text-[#5E6C84] mb-1">Architectural Phase</label>
+            <select id="project-phase" class="w-full bg-[#FAFBFC] border border-[#DFE1E6] rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-[#0052CC]">
               <option value="Concept Design">Concept Design</option>
               <option value="Schematic Approval">Schematic Approval</option>
               <option value="Working Drawings">Working Drawings</option>
@@ -136,18 +142,18 @@
         </div>
 
         <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1">Task / Deliverable Title *</label>
-          <input type="text" id="task-title" required placeholder="e.g. Column Layout & Structural Framing Plan" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500">
+          <label class="block text-xs font-semibold text-[#5E6C84] mb-1">Task / Deliverable Title *</label>
+          <input type="text" id="task-title" required placeholder="e.g. Column Layout & Framing Plan" class="w-full bg-[#FAFBFC] border border-[#DFE1E6] rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-[#0052CC] focus:bg-white">
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-medium text-slate-400 mb-1">Assignee Name *</label>
-            <input type="text" id="assignee-name" required placeholder="Person Name" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500">
+            <label class="block text-xs font-semibold text-[#5E6C84] mb-1">Assignee Name *</label>
+            <input type="text" id="assignee-name" required placeholder="Person Name" class="w-full bg-[#FAFBFC] border border-[#DFE1E6] rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-[#0052CC] focus:bg-white">
           </div>
           <div>
-            <label class="block text-xs font-medium text-slate-400 mb-1">Role</label>
-            <select id="assignee-role" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none">
+            <label class="block text-xs font-semibold text-[#5E6C84] mb-1">Role</label>
+            <select id="assignee-role" class="w-full bg-[#FAFBFC] border border-[#DFE1E6] rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-[#0052CC]">
               <option value="Principal Architect">Principal Architect</option>
               <option value="Junior Architect">Junior Architect</option>
               <option value="Draftsman">Draftsman</option>
@@ -161,12 +167,12 @@
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-medium text-slate-400 mb-1">Target Deadline *</label>
-            <input type="date" id="task-deadline" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500">
+            <label class="block text-xs font-semibold text-[#5E6C84] mb-1">Target Deadline *</label>
+            <input type="date" id="task-deadline" required class="w-full bg-[#FAFBFC] border border-[#DFE1E6] rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-[#0052CC]">
           </div>
           <div>
-            <label class="block text-xs font-medium text-slate-400 mb-1">Current Status</label>
-            <select id="task-status" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none">
+            <label class="block text-xs font-semibold text-[#5E6C84] mb-1">Current Status</label>
+            <select id="task-status" class="w-full bg-[#FAFBFC] border border-[#DFE1E6] rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-[#0052CC]">
               <option value="Not Started">Not Started</option>
               <option value="In Progress">In Progress</option>
               <option value="Client Review">Client Review</option>
@@ -177,20 +183,20 @@
         </div>
 
         <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1">Drawing / Cloud Storage Link (Optional)</label>
-          <input type="url" id="task-link" placeholder="https://drive.google.com/..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500">
+          <label class="block text-xs font-semibold text-[#5E6C84] mb-1">Drawing / Storage Link (Optional)</label>
+          <input type="url" id="task-link" placeholder="https://drive.google.com/..." class="w-full bg-[#FAFBFC] border border-[#DFE1E6] rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-[#0052CC] focus:bg-white">
         </div>
 
-        <div class="flex justify-end gap-2 pt-3 border-t border-slate-700">
-          <button type="button" onclick="closeModal()" class="px-4 py-2 text-sm rounded-lg border border-slate-700 hover:bg-slate-700 text-slate-300">Cancel</button>
-          <button type="submit" id="submit-btn" class="px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-500 font-medium rounded-lg text-white">Save Deliverable</button>
+        <div class="flex justify-end gap-2 pt-3 border-t border-[#DFE1E6]">
+          <button type="button" onclick="closeModal()" class="px-3.5 py-1.5 text-sm rounded-md border border-[#DFE1E6] hover:bg-[#FAFBFC] text-[#091E42] font-medium">Cancel</button>
+          <button type="submit" id="submit-btn" class="px-3.5 py-1.5 text-sm bg-[#0052CC] hover:bg-[#0065FF] font-medium rounded-md text-white shadow-xs">Save Deliverable</button>
         </div>
       </form>
     </div>
   </div>
 
   <script>
-    // Embedded Credentials
+    // Embedded Supabase Credentials
     const SUPABASE_URL = 'https://ldlujmpgyqamksqjzccy.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_SNU5aOt50T7EOdJV86BeRQ_hJRy6oAC';
 
@@ -310,7 +316,7 @@
       document.getElementById('stat-overdue').innerText = tasks.filter(t => t.deadline < todayStr && t.status !== 'Closed').length;
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-500">No deliverables found. Click "+ New Task" to add your first project drawing or task.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-[#5E6C84]">No deliverables found. Click "+ New Task" to add your first project drawing or task.</td></tr>`;
         return;
       }
 
@@ -319,41 +325,41 @@
         
         let statusBadge = '';
         switch(task.status) {
-          case 'Closed': statusBadge = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'; break;
-          case 'In Progress': statusBadge = 'bg-blue-500/10 text-blue-400 border-blue-500/30'; break;
-          case 'Client Review': statusBadge = 'bg-purple-500/10 text-purple-400 border-purple-500/30'; break;
-          case 'Revision Needed': statusBadge = 'bg-amber-500/10 text-amber-400 border-amber-500/30'; break;
-          default: statusBadge = 'bg-slate-700 text-slate-300 border-slate-600';
+          case 'Closed': statusBadge = 'bg-[#E3FCEF] text-[#006644] border-[#ABF5D1]'; break;
+          case 'In Progress': statusBadge = 'bg-[#DEEBFF] text-[#0747A6] border-[#B3D4FF]'; break;
+          case 'Client Review': statusBadge = 'bg-[#EAE6FF] text-[#403294] border-[#C0B6F2]'; break;
+          case 'Revision Needed': statusBadge = 'bg-[#FFFAE6] text-[#FF8B00] border-[#FFF0B3]'; break;
+          default: statusBadge = 'bg-[#F4F5F7] text-[#42526E] border-[#DFE1E6]';
         }
 
         const tr = document.createElement('tr');
-        tr.className = 'hover:bg-slate-700/30 transition-colors';
+        tr.className = 'hover:bg-[#FAFBFC] transition-colors';
         tr.innerHTML = `
-          <td class="p-4">
-            <div class="font-semibold text-slate-100">${task.project}</div>
-            <div class="text-xs text-slate-400 flex items-center gap-2 mt-0.5">
+          <td class="p-3.5">
+            <div class="font-bold text-[#091E42]">${task.project}</div>
+            <div class="text-xs text-[#5E6C84] flex items-center gap-2 mt-0.5">
               <span>${task.title}</span>
-              ${task.link ? `<a href="${task.link}" target="_blank" class="text-indigo-400 hover:underline inline-flex items-center gap-1"><i class="fa-solid fa-paperclip text-[10px]"></i> File</a>` : ''}
+              ${task.link ? `<a href="${task.link}" target="_blank" class="text-[#0052CC] hover:underline inline-flex items-center gap-1 font-medium"><i class="fa-solid fa-paperclip text-[10px]"></i> Link</a>` : ''}
             </div>
           </td>
-          <td class="p-4">
-            <div class="font-medium text-slate-200">${task.assignee}</div>
-            <div class="text-xs text-slate-400">${task.role}</div>
+          <td class="p-3.5">
+            <div class="font-semibold text-[#172B4D]">${task.assignee}</div>
+            <div class="text-xs text-[#5E6C84]">${task.role}</div>
           </td>
-          <td class="p-4">
-            <span class="text-xs bg-slate-900 border border-slate-700 px-2 py-1 rounded-md text-slate-300 font-mono">${task.phase}</span>
+          <td class="p-3.5">
+            <span class="text-xs bg-[#F4F5F7] border border-[#DFE1E6] px-2 py-0.5 rounded text-[#42526E] font-medium">${task.phase}</span>
           </td>
-          <td class="p-4">
-            <div class="${isOverdue ? 'text-rose-400 font-semibold' : 'text-slate-300'} text-xs">
+          <td class="p-3.5">
+            <div class="${isOverdue ? 'text-[#DE350B] font-bold' : 'text-[#172B4D]'} text-xs">
               ${task.deadline} ${isOverdue ? '<i class="fa-solid fa-triangle-exclamation ml-1" title="Overdue"></i>' : ''}
             </div>
           </td>
-          <td class="p-4">
-            <span class="text-xs px-2.5 py-1 rounded-full border ${statusBadge} font-medium">${task.status}</span>
+          <td class="p-3.5">
+            <span class="text-xs px-2.5 py-0.5 rounded-full border ${statusBadge} font-semibold">${task.status}</span>
           </td>
-          <td class="p-4 text-right space-x-2">
-            <button onclick="openModal(${task.id})" class="text-slate-400 hover:text-indigo-400 p-1" title="Edit Task"><i class="fa-solid fa-pen-to-square"></i></button>
-            <button onclick="deleteTask(${task.id})" class="text-slate-400 hover:text-rose-400 p-1" title="Delete Task"><i class="fa-solid fa-trash"></i></button>
+          <td class="p-3.5 text-right space-x-2">
+            <button onclick="openModal(${task.id})" class="text-[#6B778C] hover:text-[#0052CC] p-1" title="Edit Task"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button onclick="deleteTask(${task.id})" class="text-[#6B778C] hover:text-[#DE350B] p-1" title="Delete Task"><i class="fa-solid fa-trash"></i></button>
           </td>
         `;
         tbody.appendChild(tr);
